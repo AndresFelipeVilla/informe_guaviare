@@ -7,15 +7,18 @@ import com.informeguaviare.mi_informe_guaviare.application.port.in.CreateEmploye
 import com.informeguaviare.mi_informe_guaviare.domain.model.User;
 import com.informeguaviare.mi_informe_guaviare.domain.port.out.UserRepositoryOutPort;
 import jakarta.transaction.Transactional;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CreateEmployeeService implements CreateEmployeeUseCase {
 
     private final UserRepositoryOutPort userRepositoryOutPort;
+    private final PasswordEncoder passwordEncoder;
 
-    public CreateEmployeeService(UserRepositoryOutPort userRepositoryOutPort) {
+    public CreateEmployeeService(UserRepositoryOutPort userRepositoryOutPort, PasswordEncoder passwordEncoder) {
         this.userRepositoryOutPort = userRepositoryOutPort;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -26,7 +29,8 @@ public class CreateEmployeeService implements CreateEmployeeUseCase {
         if (userRepositoryOutPort.findByEmail(command.getEmail()).isPresent()) {
             throw new EmailAlreadyExistsException("Ya existe un empleado con el correo electrónico " + command.getEmail());
         }
-        User employee = User.createEmployee(command.getName(), command.getEmail(), command.getPasswordHash(), command.getPosition(), command.getDepartment(), manager);
+        String encodedPassword = passwordEncoder.encode(command.getPasswordHash());
+        User employee = User.createEmployee(command.getName(), command.getEmail(), encodedPassword, command.getPosition(), command.getDepartment(), manager);
         return userRepositoryOutPort.saveUser(employee);
     }
 }

@@ -1,9 +1,6 @@
 package com.informeguaviare.mi_informe_guaviare.infrastructure.persistence.entities;
 
 import com.informeguaviare.mi_informe_guaviare.domain.enums.Role;
-import com.informeguaviare.mi_informe_guaviare.domain.model.value.BossCode;
-import com.informeguaviare.mi_informe_guaviare.domain.model.value.Email;
-import com.informeguaviare.mi_informe_guaviare.domain.model.value.UserId;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,6 +28,10 @@ public class UserEntity {
     private String email;
     @Column(nullable = false)
     private String passwordHash;
+    @Column(nullable = false)
+    private String position;
+    @Column(nullable = false)
+    private String department;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;

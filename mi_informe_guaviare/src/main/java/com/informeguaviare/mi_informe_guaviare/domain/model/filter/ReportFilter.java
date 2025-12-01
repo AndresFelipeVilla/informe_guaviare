@@ -1,8 +1,5 @@
 package com.informeguaviare.mi_informe_guaviare.domain.model.filter;
 
-
-import java.util.UUID;
-
 public class ReportFilter {
 
     private final String status;
@@ -18,9 +15,13 @@ public class ReportFilter {
         this.authenticatedUserId = authenticatedUserId;
     }
 
-    public boolean isBoss() { return "JEFE".equalsIgnoreCase(this.authenticatedUserRole); }
-    public boolean isEmployee() { return "EMPLEADO".equalsIgnoreCase(this.authenticatedUserRole); }
+    public boolean isBoss() {
+        return "JEFE".equalsIgnoreCase(this.authenticatedUserRole);
+    }
 
+    public boolean isEmployee() {
+        return "EMPLEADO".equalsIgnoreCase(this.authenticatedUserRole);
+    }
 
     public String getStatus() {
         return status;
@@ -38,13 +39,12 @@ public class ReportFilter {
         return authenticatedUserRole;
     }
 
-    public boolean hasStatus(){
-        return status !=null && !status.isEmpty();
-   }
+    public boolean hasStatus() {
+        return status != null && !status.isEmpty();
+    }
 
-   public boolean hasQuery(){
-        return query !=null && !query.isEmpty();
-   }
-
+    public boolean hasQuery() {
+        return query != null && !query.isEmpty();
+    }
 
 }

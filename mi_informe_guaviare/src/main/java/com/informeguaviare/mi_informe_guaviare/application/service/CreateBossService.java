@@ -7,15 +7,18 @@ import com.informeguaviare.mi_informe_guaviare.application.port.in.CreateBossUse
 import com.informeguaviare.mi_informe_guaviare.domain.model.User;
 import com.informeguaviare.mi_informe_guaviare.domain.port.out.UserRepositoryOutPort;
 import jakarta.transaction.Transactional;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CreateBossService implements CreateBossUseCase {
 
     private final UserRepositoryOutPort userRepositoryOutPort;
+    private final PasswordEncoder passwordEncoder;
 
-    public CreateBossService(UserRepositoryOutPort userRepositoryOutPort) {
+    public CreateBossService(UserRepositoryOutPort userRepositoryOutPort, PasswordEncoder passwordEncoder) {
         this.userRepositoryOutPort = userRepositoryOutPort;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -27,7 +30,8 @@ public class CreateBossService implements CreateBossUseCase {
         if (userRepositoryOutPort.findByEmail(command.getEmail()).isPresent()){
             throw new EmailAlreadyExistsException("Ya existe un jefe con el correo electrónico " + command.getEmail());
         }
-        User boss = User.createBoss(command.getName(), command.getEmail(), command.getPasswordHash(), command.getPosition(), command.getDepartment(), command.getBossCode());
+        String encodedPassword = passwordEncoder.encode(command.getPasswordHash());
+        User boss = User.createBoss(command.getName(), command.getEmail(), encodedPassword, command.getPosition(), command.getDepartment(), command.getBossCode());
         return userRepositoryOutPort.saveUser(boss);
     }
 }

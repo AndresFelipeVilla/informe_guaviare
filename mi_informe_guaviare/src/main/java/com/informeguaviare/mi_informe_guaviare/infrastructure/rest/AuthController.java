@@ -4,6 +4,7 @@ import com.informeguaviare.mi_informe_guaviare.application.command.CreateBossCom
 import com.informeguaviare.mi_informe_guaviare.application.command.CreateEmployeeCommand;
 import com.informeguaviare.mi_informe_guaviare.application.port.in.CreateBossUseCase;
 import com.informeguaviare.mi_informe_guaviare.application.port.in.CreateEmployeeUseCase;
+import com.informeguaviare.mi_informe_guaviare.application.port.in.LoginUseCase;
 import com.informeguaviare.mi_informe_guaviare.domain.model.User;
 import com.informeguaviare.mi_informe_guaviare.infrastructure.rest.dto.*;
 import com.informeguaviare.mi_informe_guaviare.infrastructure.rest.mapper.UserMapperDTO;
@@ -12,46 +13,36 @@ import com.informeguaviare.mi_informe_guaviare.infrastructure.security.mapper.Us
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
     private final UserMapperDTO userMapperDTO;
     private final CreateBossUseCase createBossUseCase;
     private final CreateEmployeeUseCase createEmployeeUseCase;
+    private final LoginUseCase loginUseCase;
     private final UserDetailsMapper userDetailsMapper;
 
-    public AuthController(AuthenticationManager authenticationManager, JwtProvider jwtProvider, UserMapperDTO userMapperDTO,
-                          CreateBossUseCase createBossUseCase, CreateEmployeeUseCase createEmployeeUseCase, UserDetailsMapper userDetailsMapper
-                           ) {
-        this.authenticationManager = authenticationManager;
+    public AuthController(JwtProvider jwtProvider, UserMapperDTO userMapperDTO,
+            CreateBossUseCase createBossUseCase, CreateEmployeeUseCase createEmployeeUseCase,
+            UserDetailsMapper userDetailsMapper,
+            LoginUseCase loginUseCase) {
         this.jwtProvider = jwtProvider;
         this.userMapperDTO = userMapperDTO;
         this.createBossUseCase = createBossUseCase;
         this.createEmployeeUseCase = createEmployeeUseCase;
         this.userDetailsMapper = userDetailsMapper;
+        this.loginUseCase = loginUseCase;
     }
 
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> authenticateUser(@RequestBody LoginRequest loginRequest) {
-
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.email(),
-                        loginRequest.password()
-                )
-        );
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User user = loginUseCase.login(loginRequest.email(), loginRequest.password());
+        UserDetails userDetails = userDetailsMapper.toUserDetails(user);
         String jwt = jwtProvider.generateToken(userDetails);
         return ResponseEntity.ok(new JwtResponse(jwt));
     }
@@ -74,7 +65,7 @@ public class AuthController {
 
     }
 
-    private String generateTokenForUser(User user){
+    private String generateTokenForUser(User user) {
         return jwtProvider.generateToken(userDetailsMapper.toUserDetails(user));
     }
 

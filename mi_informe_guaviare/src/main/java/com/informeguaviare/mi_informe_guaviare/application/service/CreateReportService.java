@@ -9,15 +9,14 @@ import com.informeguaviare.mi_informe_guaviare.domain.port.out.ReportRepositoryO
 import com.informeguaviare.mi_informe_guaviare.domain.port.out.UserRepositoryOutPort;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Service
 public class CreateReportService implements CreateReportUseCase {
 
     private final ReportRepositoryOutPort reportRepositoryOutPort;
     private final UserRepositoryOutPort userRepositoryOutPort;
 
-    public CreateReportService(ReportRepositoryOutPort reportRepositoryOutPort, UserRepositoryOutPort userRepositoryOutPort) {
+    public CreateReportService(ReportRepositoryOutPort reportRepositoryOutPort,
+            UserRepositoryOutPort userRepositoryOutPort) {
         this.reportRepositoryOutPort = reportRepositoryOutPort;
         this.userRepositoryOutPort = userRepositoryOutPort;
     }
@@ -25,9 +24,10 @@ public class CreateReportService implements CreateReportUseCase {
     @Override
     public Report createReport(CreateReportCommand createReportCommand) {
         User user = userRepositoryOutPort.findById(createReportCommand.getEmployeeId())
-                .orElseThrow(()-> new UserNotFoundException("El empleado no existe"));
+                .orElseThrow(() -> new UserNotFoundException("El empleado no existe"));
         Report report = Report.create(createReportCommand.getTitle(), createReportCommand.getDescription(),
-                createReportCommand.getActivities(), createReportCommand.getObjetivo(), createReportCommand.getLinkDeEvidencia(),
+                createReportCommand.getActivities(), createReportCommand.getObjetivo(),
+                createReportCommand.getLinkDeEvidencia(),
                 user);
         return reportRepositoryOutPort.saveReport(report);
     }
