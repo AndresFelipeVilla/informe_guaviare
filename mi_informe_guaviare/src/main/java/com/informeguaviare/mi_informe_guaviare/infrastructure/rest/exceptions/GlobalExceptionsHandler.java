@@ -2,6 +2,7 @@ package com.informeguaviare.mi_informe_guaviare.infrastructure.rest.exceptions;
 
 import com.informeguaviare.mi_informe_guaviare.application.exceptions.BossCodeExistsException;
 import com.informeguaviare.mi_informe_guaviare.application.exceptions.EmailAlreadyExistsException;
+import com.informeguaviare.mi_informe_guaviare.application.exceptions.InvalidCredentialsException;
 import com.informeguaviare.mi_informe_guaviare.application.exceptions.ManagerNotFoundException;
 import com.informeguaviare.mi_informe_guaviare.application.exceptions.ReportNotFoundException;
 import com.informeguaviare.mi_informe_guaviare.infrastructure.rest.dto.ErrorResponse;
@@ -19,7 +20,6 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionsHandler {
 
-
     @ExceptionHandler(BossCodeExistsException.class)
     public ResponseEntity<ErrorResponse> handleBossCodeExistsException(BossCodeExistsException e) {
         final ErrorResponse errorResponse = new ErrorResponse(Instant.now(), HttpStatus.CONFLICT.value(),
@@ -32,6 +32,13 @@ public class GlobalExceptionsHandler {
         final ErrorResponse errorResponse = new ErrorResponse(Instant.now(), HttpStatus.CONFLICT.value(),
                 HttpStatus.CONFLICT.getReasonPhrase(), e.getMessage(), "/api/users");
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidCredentialsException(InvalidCredentialsException e) {
+        final ErrorResponse errorResponse = new ErrorResponse(Instant.now(), HttpStatus.UNAUTHORIZED.value(),
+                HttpStatus.UNAUTHORIZED.getReasonPhrase(), e.getMessage(), "/api/auth/login");
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(ManagerNotFoundException.class)

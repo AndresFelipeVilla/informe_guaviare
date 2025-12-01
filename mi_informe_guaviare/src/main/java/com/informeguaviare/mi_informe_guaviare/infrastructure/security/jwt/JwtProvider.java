@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
-import java.util.UUID;
 import java.util.function.Function;
 import com.informeguaviare.mi_informe_guaviare.infrastructure.security.CustomUserDetails;
 
@@ -31,7 +30,6 @@ public class JwtProvider {
 
     @Value("${app.jwt.expiration}")
     private long jwtExpiration;
-
 
     public String generateToken(UserDetails userDetails) {
         String userId = null;
@@ -101,4 +99,3 @@ public class JwtProvider {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }
-

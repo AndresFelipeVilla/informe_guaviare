@@ -27,7 +27,8 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserDetailsServiceImpl userDetailsService;
 
-    public SecurityConfig(JwtAuthEntryPoint jwtAuthEntryPoint, JwtAuthenticationFilter jwtAuthenticationFilter, UserDetailsServiceImpl userDetailsService){
+    public SecurityConfig(JwtAuthEntryPoint jwtAuthEntryPoint, JwtAuthenticationFilter jwtAuthenticationFilter,
+            UserDetailsServiceImpl userDetailsService) {
         this.jwtAuthEntryPoint = jwtAuthEntryPoint;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.userDetailsService = userDetailsService;
@@ -40,8 +41,7 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService);
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
@@ -59,15 +59,14 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.GET ,"/api/users/profile/**").hasAnyRole("JEFE", "EMPLEADO")
+                        .requestMatchers(HttpMethod.GET, "/api/users/profile/**").hasAnyRole("JEFE", "EMPLEADO")
                         .requestMatchers(HttpMethod.POST, "/api/reports/create").hasRole("EMPLEADO")
                         .requestMatchers(HttpMethod.POST, "/api/reports/*/send").hasRole("EMPLEADO")
                         .requestMatchers(HttpMethod.GET, "/api/reports").hasRole("EMPLEADO")
                         .requestMatchers(HttpMethod.GET, "/api/reports/summary").hasRole("JEFE")
                         .requestMatchers(HttpMethod.DELETE, "/api/reports/*").hasRole("EMPLEADO")
 
-                        .anyRequest().authenticated()
-                )
+                        .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
