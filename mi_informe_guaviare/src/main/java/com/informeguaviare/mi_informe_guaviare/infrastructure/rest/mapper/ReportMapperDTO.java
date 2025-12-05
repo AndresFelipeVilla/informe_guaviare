@@ -11,10 +11,10 @@ import org.mapstruct.Mapping;
 import java.util.List;
 import java.util.UUID;
 
-
-@Mapper(componentModel = "spring", uses = {ValueObjectMapper.class})
+@Mapper(componentModel = "spring", uses = { ValueObjectMapper.class })
 public interface ReportMapperDTO {
 
+    @Mapping(target = "employeeId", ignore = true)
     CreateReportCommand toCreateReportCommand(CreateReportRequest request);
 
     @Mapping(source = "employee.name", target = "responsible")
@@ -29,6 +29,7 @@ public interface ReportMapperDTO {
 
     @Mapping(target = "employee", source = "employee.name")
     ReportSummaryResponse toReportSummaryResponse(Report report);
+
     List<ReportSummaryResponse> toReportListSummary(List<Report> reports);
 
     List<ReportListResponse> toReportListResponse(List<Report> reports);
