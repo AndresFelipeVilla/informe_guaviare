@@ -1,46 +1,48 @@
 package com.informeguaviare.mi_informe_guaviare.application.service;
 
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+
+import com.informeguaviare.mi_informe_guaviare.application.command.UpdateReportCommand;
 import com.informeguaviare.mi_informe_guaviare.application.exceptions.ReportNotFoundException;
 import com.informeguaviare.mi_informe_guaviare.application.exceptions.UnauthorizedReportAccessException;
-import com.informeguaviare.mi_informe_guaviare.application.port.in.DeleteReportUseCase;
-import com.informeguaviare.mi_informe_guaviare.domain.enums.ReportStatus;
+import com.informeguaviare.mi_informe_guaviare.application.port.in.UpdateReportUseCase;
 import com.informeguaviare.mi_informe_guaviare.domain.model.Report;
 import com.informeguaviare.mi_informe_guaviare.domain.port.out.ReportRepositoryOutPort;
 import com.informeguaviare.mi_informe_guaviare.domain.port.out.UserAuthenticationPort;
-import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Service
-public class DeleteReportService implements DeleteReportUseCase {
+public class UpdateReportService implements UpdateReportUseCase {
 
     private final ReportRepositoryOutPort reportRepositoryOutPort;
     private final UserAuthenticationPort userAuthenticationPort;
 
-    public DeleteReportService(ReportRepositoryOutPort reportRepositoryOutPort,
+    public UpdateReportService(ReportRepositoryOutPort reportRepositoryOutPort,
             UserAuthenticationPort userAuthenticationPort) {
         this.reportRepositoryOutPort = reportRepositoryOutPort;
         this.userAuthenticationPort = userAuthenticationPort;
     }
 
     @Override
-    public void deleteReport(UUID reportId) {
+    public Report updateReport(UUID reportId, UpdateReportCommand command) {
         UUID userId = userAuthenticationPort.getCurrentAuthenticatedUserId();
-        Report report = reportRepositoryOutPort.findById(reportId)
-                .orElseThrow(() -> new ReportNotFoundException("Report no encontrado"));
+        Report report = reportRepositoryOutPort
+                .findById(reportId)
+                .orElseThrow(() -> new ReportNotFoundException("Reporte no encontrado"));
 
-        // Verificar que el usuario autenticado es el dueño del reporte
         if (!report.getEmployee().getUserId().getValue().equals(userId)) {
             throw new UnauthorizedReportAccessException(
-                    String.format("El usuario no tiene permiso para eliminar el reporte con ID %s. " +
-                            "Solo el propietario del reporte puede eliminarlo.",
+                    String.format("El usuario no tiene permiso para modificar el reporte con ID %s. " +
+                            "Solo el propietario del reporte puede modificarlo.",
                             reportId));
         }
 
-        if (report.getStatus() != ReportStatus.BORRADOR) {
-            throw new IllegalStateException(
-                    "Solo se puede eliminar un reporte que está en estado de borrador (BORRADOR).");
-        }
-        reportRepositoryOutPort.deleteById(reportId);
+        report.update(command.getTitle(), command.getDescription(), command.getActivities(),
+                command.getObjective(), command.getEvidenceLink());
+
+        Report updatedReport = reportRepositoryOutPort.saveReport(report);
+        return updatedReport;
     }
+
 }

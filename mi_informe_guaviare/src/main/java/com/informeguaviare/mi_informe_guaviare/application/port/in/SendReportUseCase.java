@@ -5,5 +5,5 @@ import com.informeguaviare.mi_informe_guaviare.domain.model.Report;
 
 public interface SendReportUseCase {
 
-    Report SendReport(SendReportCommand reportCommand);
+    Report sendReport(SendReportCommand reportCommand);
 }

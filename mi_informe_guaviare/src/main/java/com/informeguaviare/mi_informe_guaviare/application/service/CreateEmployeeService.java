@@ -5,32 +5,36 @@ import com.informeguaviare.mi_informe_guaviare.application.exceptions.EmailAlrea
 import com.informeguaviare.mi_informe_guaviare.application.exceptions.ManagerNotFoundException;
 import com.informeguaviare.mi_informe_guaviare.application.port.in.CreateEmployeeUseCase;
 import com.informeguaviare.mi_informe_guaviare.domain.model.User;
+import com.informeguaviare.mi_informe_guaviare.domain.port.out.PasswordEncryptionOutPort;
 import com.informeguaviare.mi_informe_guaviare.domain.port.out.UserRepositoryOutPort;
 import jakarta.transaction.Transactional;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CreateEmployeeService implements CreateEmployeeUseCase {
 
     private final UserRepositoryOutPort userRepositoryOutPort;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncryptionOutPort passwordEncryptionOutPort;
 
-    public CreateEmployeeService(UserRepositoryOutPort userRepositoryOutPort, PasswordEncoder passwordEncoder) {
+    public CreateEmployeeService(UserRepositoryOutPort userRepositoryOutPort,
+            PasswordEncryptionOutPort passwordEncryptionOutPort) {
         this.userRepositoryOutPort = userRepositoryOutPort;
-        this.passwordEncoder = passwordEncoder;
+        this.passwordEncryptionOutPort = passwordEncryptionOutPort;
     }
 
     @Override
     @Transactional
     public User createEmployee(CreateEmployeeCommand command) {
         User manager = userRepositoryOutPort.findByBossCode(command.getManagerBossCode())
-                .orElseThrow(() -> new ManagerNotFoundException("El jefe con código " + command.getManagerBossCode() + " no existe."));
+                .orElseThrow(() -> new ManagerNotFoundException(
+                        "El jefe con código " + command.getManagerBossCode() + " no existe."));
         if (userRepositoryOutPort.findByEmail(command.getEmail()).isPresent()) {
-            throw new EmailAlreadyExistsException("Ya existe un empleado con el correo electrónico " + command.getEmail());
+            throw new EmailAlreadyExistsException(
+                    "Ya existe un empleado con el correo electrónico " + command.getEmail());
         }
-        String encodedPassword = passwordEncoder.encode(command.getPasswordHash());
-        User employee = User.createEmployee(command.getName(), command.getEmail(), encodedPassword, command.getPosition(), command.getDepartment(), manager);
+        String encodedPassword = passwordEncryptionOutPort.encodePassword(command.getPassword());
+        User employee = User.createEmployee(command.getName(), command.getEmail(), encodedPassword,
+                command.getPosition(), command.getDepartment(), manager);
         return userRepositoryOutPort.saveUser(employee);
     }
 }

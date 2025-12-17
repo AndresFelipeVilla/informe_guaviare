@@ -9,8 +9,10 @@ import com.informeguaviare.mi_informe_guaviare.application.exceptions.ManagerNot
 import com.informeguaviare.mi_informe_guaviare.application.exceptions.ReportNotFoundException;
 import com.informeguaviare.mi_informe_guaviare.application.exceptions.TokenExpiredException;
 import com.informeguaviare.mi_informe_guaviare.application.exceptions.TokenNotFoundException;
+import com.informeguaviare.mi_informe_guaviare.application.exceptions.UnauthorizedReportAccessException;
 import com.informeguaviare.mi_informe_guaviare.application.exceptions.UserNotFoundException;
 import com.informeguaviare.mi_informe_guaviare.domain.exceptions.DomainException;
+import com.informeguaviare.mi_informe_guaviare.domain.exceptions.InvalidReportStatusException;
 import com.informeguaviare.mi_informe_guaviare.infrastructure.rest.dto.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -120,6 +122,28 @@ public class GlobalExceptionsHandler {
                 e.getMessage(),
                 "/api/auth/password-recovery/reset-password");
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidReportStatusException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidReportStatusException(InvalidReportStatusException e) {
+        final ErrorResponse errorResponse = new ErrorResponse(
+                Instant.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                e.getMessage(),
+                "/api/reports");
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UnauthorizedReportAccessException.class)
+    public ResponseEntity<ErrorResponse> handleUnauthorizedReportAccessException(UnauthorizedReportAccessException e) {
+        final ErrorResponse errorResponse = new ErrorResponse(
+                Instant.now(),
+                HttpStatus.FORBIDDEN.value(),
+                HttpStatus.FORBIDDEN.getReasonPhrase(),
+                e.getMessage(),
+                "/api/reports");
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
     }
 
 }

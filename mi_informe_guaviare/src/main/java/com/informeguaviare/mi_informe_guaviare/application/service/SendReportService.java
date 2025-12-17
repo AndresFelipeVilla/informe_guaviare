@@ -18,28 +18,29 @@ public class SendReportService implements SendReportUseCase {
     private final ReportRepositoryOutPort reportRepositoryOutPort;
     private final UserAuthenticationPort userAuthenticationPort;
 
-    public SendReportService(ReportRepositoryOutPort reportRepositoryOutPort, UserAuthenticationPort userAuthenticationPort) {
+    public SendReportService(ReportRepositoryOutPort reportRepositoryOutPort,
+            UserAuthenticationPort userAuthenticationPort) {
         this.reportRepositoryOutPort = reportRepositoryOutPort;
         this.userAuthenticationPort = userAuthenticationPort;
     }
 
     @Override
     @Transactional
-    public Report SendReport(SendReportCommand reportCommand) {
+    public Report sendReport(SendReportCommand reportCommand) {
 
-            UUID authenticatedUserId = userAuthenticationPort.getCurrentAuthenticatedUserId();
+        UUID authenticatedUserId = userAuthenticationPort.getCurrentAuthenticatedUserId();
 
-            Report report = reportRepositoryOutPort.findById(reportCommand.getReportId())
-                    .orElseThrow(()-> new ReportNotFoundException("El reporte no existe"));
+        Report report = reportRepositoryOutPort.findById(reportCommand.getReportId())
+                .orElseThrow(() -> new ReportNotFoundException("El reporte no existe"));
 
-            UUID reportOwnerId = report.getEmployee().getUserId().getValue();
+        UUID reportOwnerId = report.getEmployee().getUserId().getValue();
 
-            if (!reportOwnerId.equals(authenticatedUserId)){
-                throw new AccessDeniedException("No tienes permiso para enviar este reporte. Pertenece a otro usuario.");
-            }
+        if (!reportOwnerId.equals(authenticatedUserId)) {
+            throw new AccessDeniedException("No tienes permiso para enviar este reporte. Pertenece a otro usuario.");
+        }
 
-            report.send();
-            return reportRepositoryOutPort.saveReport(report);
+        report.send();
+        return reportRepositoryOutPort.saveReport(report);
     }
 
 }

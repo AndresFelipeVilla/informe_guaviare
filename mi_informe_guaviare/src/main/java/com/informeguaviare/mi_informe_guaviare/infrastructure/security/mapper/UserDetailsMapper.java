@@ -16,11 +16,9 @@ public class UserDetailsMapper {
         List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
         return new CustomUserDetails(
                 user.getEmail().getValue(),
-                user.getPasswordHash(),
+                user.getPassword(),
                 authorities,
-                user.getUserId().getValue().toString()
-        );
+                user.getUserId().getValue().toString());
     }
 
 }
-

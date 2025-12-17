@@ -8,11 +8,17 @@ public class ReportFilter {
     private final String authenticatedUserId;
     private final String authenticatedUserRole;
 
-    public ReportFilter(String status, String query, String authenticatedUserRole, String authenticatedUserId) {
+    private int page;
+    private int size;
+
+    public ReportFilter(String status, String query, String authenticatedUserRole, String authenticatedUserId, int page,
+            int size) {
         this.status = status;
         this.query = query;
         this.authenticatedUserRole = authenticatedUserRole;
         this.authenticatedUserId = authenticatedUserId;
+        this.page = (page < 0) ? 0 : page;
+        this.size = (size < 1) ? 10 : size;
     }
 
     public boolean isBoss() {
@@ -37,6 +43,14 @@ public class ReportFilter {
 
     public String getAuthenticatedUserRole() {
         return authenticatedUserRole;
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public int getSize() {
+        return size;
     }
 
     public boolean hasStatus() {

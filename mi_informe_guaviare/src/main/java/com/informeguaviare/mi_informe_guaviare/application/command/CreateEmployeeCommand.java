@@ -3,7 +3,7 @@ package com.informeguaviare.mi_informe_guaviare.application.command;
 public class CreateEmployeeCommand {
     private String name;
     private String email;
-    private String passwordHash;
+    private String password;
     private String position;
     private String department;
     private String managerBossCode;
@@ -11,10 +11,11 @@ public class CreateEmployeeCommand {
     public CreateEmployeeCommand() {
     }
 
-    public CreateEmployeeCommand(String name, String email, String passwordHash, String position, String department, String managerBossCode) {
+    public CreateEmployeeCommand(String name, String email, String password, String position, String department,
+            String managerBossCode) {
         this.name = name;
         this.email = email;
-        this.passwordHash = passwordHash;
+        this.password = password;
         this.position = position;
         this.department = department;
         this.managerBossCode = managerBossCode;
@@ -37,12 +38,12 @@ public class CreateEmployeeCommand {
         this.email = email;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getPosition() {

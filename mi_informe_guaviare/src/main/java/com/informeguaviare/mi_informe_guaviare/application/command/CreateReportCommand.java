@@ -7,20 +7,20 @@ public class CreateReportCommand {
     private String title;
     private String description;
     private String activities;
-    private String objetivo;
-    private String linkDeEvidencia;
+    private String objective;
+    private String evidenceLink;
     private UUID employeeId;
-
 
     public CreateReportCommand() {
     }
 
-    public CreateReportCommand(String title, String description, String activities, String objetivo, String linkDeEvidencia, UUID employeeId) {
+    public CreateReportCommand(String title, String description, String activities, String objective,
+            String evidenceLink, UUID employeeId) {
         this.title = title;
         this.description = description;
         this.activities = activities;
-        this.objetivo = objetivo;
-        this.linkDeEvidencia = linkDeEvidencia;
+        this.objective = objective;
+        this.evidenceLink = evidenceLink;
         this.employeeId = employeeId;
     }
 
@@ -48,20 +48,20 @@ public class CreateReportCommand {
         this.activities = activities;
     }
 
-    public String getObjetivo() {
-        return objetivo;
+    public String getObjective() {
+        return objective;
     }
 
-    public void setObjetivo(String objetivo) {
-        this.objetivo = objetivo;
+    public void setObjective(String objective) {
+        this.objective = objective;
     }
 
-    public String getLinkDeEvidencia() {
-        return linkDeEvidencia;
+    public String getEvidenceLink() {
+        return evidenceLink;
     }
 
-    public void setLinkDeEvidencia(String linkDeEvidencia) {
-        this.linkDeEvidencia = linkDeEvidencia;
+    public void setEvidenceLink(String evidenceLink) {
+        this.evidenceLink = evidenceLink;
     }
 
     public UUID getEmployeeId() {

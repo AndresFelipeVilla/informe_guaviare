@@ -4,16 +4,18 @@ import com.informeguaviare.mi_informe_guaviare.domain.enums.ReportStatus;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 public class ReportResponse {
 
+    private UUID reportId;
     private String title;
     private String description;
     private String responsible;
     private String activities;
-    private String objetivo;
-    private String linkDeEvidencia;
+    private String objective;
+    private String evidenceLink;
     private ReportStatus status;
     private LocalDateTime createdAt;
 

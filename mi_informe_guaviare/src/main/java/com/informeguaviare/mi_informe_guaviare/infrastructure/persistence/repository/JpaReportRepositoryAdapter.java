@@ -1,5 +1,6 @@
 package com.informeguaviare.mi_informe_guaviare.infrastructure.persistence.repository;
 
+import com.informeguaviare.mi_informe_guaviare.domain.model.PagedResult;
 import com.informeguaviare.mi_informe_guaviare.domain.model.Report;
 import com.informeguaviare.mi_informe_guaviare.domain.model.filter.ReportFilter;
 import com.informeguaviare.mi_informe_guaviare.domain.port.out.ReportRepositoryOutPort;
@@ -7,7 +8,9 @@ import com.informeguaviare.mi_informe_guaviare.infrastructure.persistence.spring
 import com.informeguaviare.mi_informe_guaviare.infrastructure.persistence.springdata.SpringDataReportRepository;
 import com.informeguaviare.mi_informe_guaviare.infrastructure.persistence.entities.ReportEntity;
 import com.informeguaviare.mi_informe_guaviare.infrastructure.persistence.mapper.ReportPersistenceMapper;
-import org.springframework.data.jpa.domain.Specification;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,7 +23,8 @@ public class JpaReportRepositoryAdapter implements ReportRepositoryOutPort {
     private final SpringDataReportRepository springDataReportRepository;
     private final ReportPersistenceMapper reportPersistenceMapper;
 
-    public JpaReportRepositoryAdapter(SpringDataReportRepository springDataReportRepository, ReportPersistenceMapper reportPersistenceMapper) {
+    public JpaReportRepositoryAdapter(SpringDataReportRepository springDataReportRepository,
+            ReportPersistenceMapper reportPersistenceMapper) {
         this.springDataReportRepository = springDataReportRepository;
         this.reportPersistenceMapper = reportPersistenceMapper;
     }
@@ -44,15 +48,15 @@ public class JpaReportRepositoryAdapter implements ReportRepositoryOutPort {
     }
 
     @Override
-    public List<Report> findByFilter(ReportFilter filter) {
-        Specification<ReportEntity> spec = ReportSpecification.byFilter(filter);
-        List<ReportEntity> entities = springDataReportRepository.findAll(spec);
-        return entities.stream().map(reportPersistenceMapper::toDomain).toList();
+    public PagedResult<Report> findByFilter(ReportFilter filter) {
+        PageRequest pageRequest = PageRequest.of(filter.getPage(), filter.getSize());
+
+        Page<ReportEntity> pageEntity = springDataReportRepository.findAll(ReportSpecification.byFilter(filter),
+                pageRequest);
+
+        List<Report> reports = pageEntity.getContent().stream().map(reportPersistenceMapper::toDomain).toList();
+        return new PagedResult<>(reports, pageEntity.getNumber(), pageEntity.getSize(),
+                pageEntity.getNumberOfElements());
     }
-
-
-
-
-
 
 }

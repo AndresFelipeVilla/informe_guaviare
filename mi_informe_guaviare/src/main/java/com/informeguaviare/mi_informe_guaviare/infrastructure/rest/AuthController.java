@@ -40,7 +40,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> authenticateUser(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<JwtResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         User user = loginUseCase.login(loginRequest.email(), loginRequest.password());
         UserDetails userDetails = userDetailsMapper.toUserDetails(user);
         String jwt = jwtProvider.generateToken(userDetails);

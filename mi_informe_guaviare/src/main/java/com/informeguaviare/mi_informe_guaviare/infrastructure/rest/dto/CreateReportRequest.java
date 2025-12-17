@@ -11,7 +11,7 @@ public class CreateReportRequest {
     private String description;
     private String activities;
     @NotBlank(message = "El objetivo no puede estar vacío.")
-    private String objetivo;
-    private String linkDeEvidencia;
+    private String objective;
+    private String evidenceLink;
 
 }

@@ -3,7 +3,7 @@ package com.informeguaviare.mi_informe_guaviare.application.command;
 public class CreateBossCommand {
     private String name;
     private String email;
-    private String passwordHash;
+    private String password;
     private String position;
     private String department;
     private String bossCode;
@@ -11,10 +11,11 @@ public class CreateBossCommand {
     public CreateBossCommand() {
     }
 
-    public CreateBossCommand(String name, String email, String passwordHash, String position, String department, String bossCode) {
+    public CreateBossCommand(String name, String email, String password, String position, String department,
+            String bossCode) {
         this.name = name;
         this.email = email;
-        this.passwordHash = passwordHash;
+        this.password = password;
         this.position = position;
         this.department = department;
         this.bossCode = bossCode;
@@ -37,12 +38,12 @@ public class CreateBossCommand {
         this.email = email;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getPosition() {

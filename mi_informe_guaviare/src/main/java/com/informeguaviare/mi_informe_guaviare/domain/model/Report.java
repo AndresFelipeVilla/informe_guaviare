@@ -2,8 +2,8 @@ package com.informeguaviare.mi_informe_guaviare.domain.model;
 
 import java.time.LocalDateTime;
 import com.informeguaviare.mi_informe_guaviare.domain.enums.ReportStatus;
+import com.informeguaviare.mi_informe_guaviare.domain.exceptions.InvalidReportStatusException;
 import com.informeguaviare.mi_informe_guaviare.domain.model.value.ReportId;
-
 
 public class Report {
 
@@ -11,35 +11,37 @@ public class Report {
     private String title;
     private String description;
     private String activities;
-    private String objetivo;
-    private String linkDeEvidencia;
+    private String objective;
+    private String evidenceLink;
     private ReportStatus status;
     private final User employee;
     private LocalDateTime sentIn;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-
-    public Report(ReportId reportId, String title, String description, String activities, String objetivo, String linkDeEvidencia, User employee) {
+    public Report(ReportId reportId, String title, String description, String activities, String objetivo,
+            String linkDeEvidencia, User employee) {
         this.reportId = reportId;
         this.title = title;
         this.description = description;
         this.activities = activities;
-        this.objetivo = objetivo;
-        this.linkDeEvidencia = linkDeEvidencia;
+        this.objective = objetivo;
+        this.evidenceLink = linkDeEvidencia;
         this.employee = employee;
         this.status = ReportStatus.BORRADOR;
         this.createdAt = LocalDateTime.now();
     }
 
-    private Report(ReportId reportId, String title, String description, String activities, String objetivo, String linkDeEvidencia,
-                   ReportStatus status, User employee, LocalDateTime sentIn, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    private Report(ReportId reportId, String title, String description, String activities, String objective,
+            String evidenceLink,
+            ReportStatus status, User employee, LocalDateTime sentIn, LocalDateTime createdAt,
+            LocalDateTime updatedAt) {
         this.reportId = reportId;
         this.title = title;
         this.description = description;
         this.activities = activities;
-        this.objetivo = objetivo;
-        this.linkDeEvidencia = linkDeEvidencia;
+        this.objective = objective;
+        this.evidenceLink = evidenceLink;
         this.status = status;
         this.employee = employee;
         this.sentIn = sentIn;
@@ -47,26 +49,62 @@ public class Report {
         this.updatedAt = updatedAt;
     }
 
-    public static Report load(ReportId reportId, String title, String description, String activities, String objetivo, String linkDeEvidencia,
-                              ReportStatus status, User employee, LocalDateTime sentIn, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public static Report load(ReportId reportId, String title, String description, String activities, String objective,
+            String evidenceLink,
+            ReportStatus status, User employee, LocalDateTime sentIn, LocalDateTime createdAt,
+            LocalDateTime updatedAt) {
 
-        return new Report(reportId, title, description, activities, objetivo, linkDeEvidencia,
+        return new Report(reportId, title, description, activities, objective, evidenceLink,
                 status, employee, sentIn, createdAt, updatedAt);
     }
 
-    public static Report create(String title, String description, String activities, String objetivo, String linkDeEvidencia, User employee) {
+    public static Report create(String title, String description, String activities, String objective,
+            String evidenceLink, User employee) {
         if (title == null || title.trim().isEmpty()) {
             throw new IllegalArgumentException("El título no puede ser nulo o vacío.");
         }
         if (employee == null) {
             throw new IllegalArgumentException("El reporte debe estar asociado a un empleado.");
         }
-        return new Report(null, title, description, activities, objetivo, linkDeEvidencia, employee);
+        return new Report(null, title, description, activities, objective, evidenceLink, employee);
+    }
+
+    public void update(String newTitle, String newDescription, String newActivities,
+            String newObjective, String newLinkOfEvidence) {
+        validateCanBeUpdated();
+
+        if (newTitle != null && !newTitle.trim().isEmpty()) {
+            this.title = newTitle;
+        }
+        if (newDescription != null) {
+            this.description = newDescription;
+        }
+        if (newActivities != null) {
+            this.activities = newActivities;
+        }
+        if (newObjective != null) {
+            this.objective = newObjective;
+        }
+        if (newLinkOfEvidence != null) {
+            this.evidenceLink = newLinkOfEvidence;
+        }
+
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    private void validateCanBeUpdated() {
+        if (this.status != ReportStatus.BORRADOR) {
+            throw new InvalidReportStatusException(
+                    String.format("El reporte no puede ser actualizado porque su estado es %s. " +
+                            "Solo los reportes en estado BORRADOR pueden ser modificados.",
+                            this.status));
+        }
     }
 
     public void send() {
         if (this.status != ReportStatus.BORRADOR) {
-            throw new IllegalStateException("Solo se puede enviar un reporte que está en estado de borrador (BORRADOR).");
+            throw new IllegalStateException(
+                    "Solo se puede enviar un reporte que está en estado de borrador (BORRADOR).");
         }
 
         this.status = ReportStatus.ENVIADO;
@@ -77,35 +115,44 @@ public class Report {
     public ReportId getReportId() {
         return reportId;
     }
+
     public String getTitle() {
         return title;
     }
+
     public String getDescription() {
         return description;
     }
-    public String getActivities(){
+
+    public String getActivities() {
         return activities;
     }
-    public String getObjetivo() {
-        return objetivo;
+
+    public String getObjective() {
+        return objective;
     }
-    public String getLinkDeEvidencia() {
-        return linkDeEvidencia;
+
+    public String getEvidenceLink() {
+        return evidenceLink;
     }
+
     public ReportStatus getStatus() {
         return status;
     }
+
     public User getEmployee() {
         return employee;
     }
+
     public LocalDateTime getSentIn() {
         return sentIn;
     }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
+
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 }
-
