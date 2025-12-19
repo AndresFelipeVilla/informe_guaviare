@@ -26,15 +26,16 @@ public class CreateBossService implements CreateBossUseCase {
     @Override
     @Transactional
     public User createBoss(CreateBossCommand command) {
-        if (userRepositoryOutPort.findByBossCode(command.getBossCode()).isPresent()) {
+        if (userRepositoryOutPort.findByBossCode(command.getBossCode().toLowerCase()).isPresent()) {
             throw new BossCodeExistsException("Ya existe un jefe con el código " + command.getBossCode());
         }
-        if (userRepositoryOutPort.findByEmail(command.getEmail()).isPresent()) {
+        if (userRepositoryOutPort.findByEmail(command.getEmail().toLowerCase()).isPresent()) {
             throw new EmailAlreadyExistsException("Ya existe un jefe con el correo electrónico " + command.getEmail());
         }
         String encodedPassword = passwordEncryptionOutPort.encodePassword(command.getPassword());
-        User boss = User.createBoss(command.getName(), command.getEmail(), encodedPassword, command.getPosition(),
-                command.getDepartment(), command.getBossCode());
+        User boss = User.createBoss(command.getName(), command.getEmail().toLowerCase(), encodedPassword,
+                command.getPosition(),
+                command.getDepartment(), command.getBossCode().toLowerCase());
         return userRepositoryOutPort.saveUser(boss);
     }
 }

@@ -8,19 +8,19 @@ public class CreateReportCommand {
     private String description;
     private String activities;
     private String objective;
-    private String evidenceLink;
+    private String evidencieLink;
     private UUID employeeId;
 
     public CreateReportCommand() {
     }
 
     public CreateReportCommand(String title, String description, String activities, String objective,
-            String evidenceLink, UUID employeeId) {
+            String evidencieLink, UUID employeeId) {
         this.title = title;
         this.description = description;
         this.activities = activities;
         this.objective = objective;
-        this.evidenceLink = evidenceLink;
+        this.evidencieLink = evidencieLink;
         this.employeeId = employeeId;
     }
 
@@ -56,12 +56,12 @@ public class CreateReportCommand {
         this.objective = objective;
     }
 
-    public String getEvidenceLink() {
-        return evidenceLink;
+    public String getEvidencieLink() {
+        return evidencieLink;
     }
 
-    public void setEvidenceLink(String evidenceLink) {
-        this.evidenceLink = evidenceLink;
+    public void setEvidencieLink(String evidencieLink) {
+        this.evidencieLink = evidencieLink;
     }
 
     public UUID getEmployeeId() {

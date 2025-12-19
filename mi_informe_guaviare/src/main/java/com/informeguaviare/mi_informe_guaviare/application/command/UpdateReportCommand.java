@@ -6,15 +6,15 @@ public class UpdateReportCommand {
     private final String description;
     private final String activities;
     private final String objective;
-    private final String evidenceLink;
+    private final String evidencieLink;
 
     public UpdateReportCommand(String title, String description, String activities, String objective,
-            String evidenceLink) {
+            String evidencieLink) {
         this.title = title;
         this.description = description;
         this.activities = activities;
         this.objective = objective;
-        this.evidenceLink = evidenceLink;
+        this.evidencieLink = evidencieLink;
     }
 
     public String getTitle() {
@@ -33,8 +33,8 @@ public class UpdateReportCommand {
         return objective;
     }
 
-    public String getEvidenceLink() {
-        return evidenceLink;
+    public String getEvidencieLink() {
+        return evidencieLink;
     }
 
 }

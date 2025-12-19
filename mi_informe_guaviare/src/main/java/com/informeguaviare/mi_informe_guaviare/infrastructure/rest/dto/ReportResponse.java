@@ -15,7 +15,7 @@ public class ReportResponse {
     private String responsible;
     private String activities;
     private String objective;
-    private String evidenceLink;
+    private String evidencieLink;
     private ReportStatus status;
     private LocalDateTime createdAt;
 

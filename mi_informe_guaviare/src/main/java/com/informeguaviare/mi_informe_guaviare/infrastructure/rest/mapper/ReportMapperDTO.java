@@ -51,7 +51,7 @@ public interface ReportMapperDTO {
     @Mapping(source = "request.description", target = "description")
     @Mapping(source = "request.activities", target = "activities")
     @Mapping(source = "request.objective", target = "objective")
-    @Mapping(source = "request.evidenceLink", target = "evidenceLink")
+    @Mapping(source = "request.evidencieLink", target = "evidencieLink")
     UpdateReportCommand toUpdateReportCommand(UpdateReportRequest request);
 
     @Mapping(source = "pagedResult.pageNumber", target = "page")

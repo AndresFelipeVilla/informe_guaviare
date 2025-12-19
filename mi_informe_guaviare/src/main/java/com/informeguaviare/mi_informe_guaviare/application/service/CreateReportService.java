@@ -27,7 +27,7 @@ public class CreateReportService implements CreateReportUseCase {
                 .orElseThrow(() -> new UserNotFoundException("El empleado no existe"));
         Report report = Report.create(createReportCommand.getTitle(), createReportCommand.getDescription(),
                 createReportCommand.getActivities(), createReportCommand.getObjective(),
-                createReportCommand.getEvidenceLink(),
+                createReportCommand.getEvidencieLink(),
                 user);
         return reportRepositoryOutPort.saveReport(report);
     }

@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Mapper(componentModel = "spring", uses = {ValueObjectMapper.class, UserPersistenceMapper.class})
+@Mapper(componentModel = "spring", uses = { ValueObjectMapper.class, UserPersistenceMapper.class })
 public abstract class ReportPersistenceMapper {
 
     @Autowired
@@ -23,14 +23,13 @@ public abstract class ReportPersistenceMapper {
                 reportEntity.getTitle(),
                 reportEntity.getDescription(),
                 reportEntity.getActivities(),
-                reportEntity.getObjetivo(),
-                reportEntity.getLinkDeEvidencia(),
+                reportEntity.getObjective(),
+                reportEntity.getEvidencieLink(),
                 reportEntity.getStatus(),
                 (reportEntity.getEmployee() == null) ? null : userMapper.toDomain(reportEntity.getEmployee()),
                 reportEntity.getSentIn(),
                 reportEntity.getCreatedAt(),
-                reportEntity.getUpdatedAt()
-        );
+                reportEntity.getUpdatedAt());
     }
 
     @Mapping(target = "reportId", source = "reportId", qualifiedByName = "reportIdToUUID")

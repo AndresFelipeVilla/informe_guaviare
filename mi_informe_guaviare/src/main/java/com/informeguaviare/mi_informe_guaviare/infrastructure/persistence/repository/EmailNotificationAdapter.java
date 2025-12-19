@@ -52,12 +52,12 @@ public class EmailNotificationAdapter implements EmailNotificationPort {
             String htmlContent = passwordResetEmailTemplate.createResetPasswordEmail(user.getName(), resetUrl);
 
             helper.setText(htmlContent, true);
-            ClassPathResource imageResource = new ClassPathResource("static/images/logo.png");
+            ClassPathResource imageResource = new ClassPathResource("static/images/Logo.png");
 
             if (imageResource.exists()) {
                 helper.addInline("logoImage", imageResource);
             } else {
-                System.err.println("ADVERTENCIA: No se encontró logo.png en resources/static/images/");
+                System.err.println("ADVERTENCIA: No se encontró Logo.png en resources/static/images/");
             }
 
             javaEmailSender.send(message);

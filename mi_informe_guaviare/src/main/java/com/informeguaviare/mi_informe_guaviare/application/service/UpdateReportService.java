@@ -39,7 +39,7 @@ public class UpdateReportService implements UpdateReportUseCase {
         }
 
         report.update(command.getTitle(), command.getDescription(), command.getActivities(),
-                command.getObjective(), command.getEvidenceLink());
+                command.getObjective(), command.getEvidencieLink());
 
         Report updatedReport = reportRepositoryOutPort.saveReport(report);
         return updatedReport;

@@ -28,12 +28,12 @@ public class CreateEmployeeService implements CreateEmployeeUseCase {
         User manager = userRepositoryOutPort.findByBossCode(command.getManagerBossCode())
                 .orElseThrow(() -> new ManagerNotFoundException(
                         "El jefe con código " + command.getManagerBossCode() + " no existe."));
-        if (userRepositoryOutPort.findByEmail(command.getEmail()).isPresent()) {
+        if (userRepositoryOutPort.findByEmail(command.getEmail().toLowerCase()).isPresent()) {
             throw new EmailAlreadyExistsException(
                     "Ya existe un empleado con el correo electrónico " + command.getEmail());
         }
         String encodedPassword = passwordEncryptionOutPort.encodePassword(command.getPassword());
-        User employee = User.createEmployee(command.getName(), command.getEmail(), encodedPassword,
+        User employee = User.createEmployee(command.getName(), command.getEmail().toLowerCase(), encodedPassword,
                 command.getPosition(), command.getDepartment(), manager);
         return userRepositoryOutPort.saveUser(employee);
     }

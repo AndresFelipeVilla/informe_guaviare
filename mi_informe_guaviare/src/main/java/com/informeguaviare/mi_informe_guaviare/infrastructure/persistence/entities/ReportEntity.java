@@ -27,8 +27,8 @@ public class ReportEntity {
     @Column(columnDefinition = "TEXT")
     private String activities;
     @Column(columnDefinition = "TEXT")
-    private String objetivo;
-    private String linkDeEvidencia;
+    private String objective;
+    private String evidencieLink;
     @Enumerated(EnumType.STRING)
     private ReportStatus status;
     private LocalDateTime createdAt;

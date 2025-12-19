@@ -12,28 +12,28 @@ public class Report {
     private String description;
     private String activities;
     private String objective;
-    private String evidenceLink;
+    private String evidencieLink;
     private ReportStatus status;
     private final User employee;
     private LocalDateTime sentIn;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Report(ReportId reportId, String title, String description, String activities, String objetivo,
-            String linkDeEvidencia, User employee) {
+    public Report(ReportId reportId, String title, String description, String activities, String objective,
+            String evidencieLink, User employee) {
         this.reportId = reportId;
         this.title = title;
         this.description = description;
         this.activities = activities;
-        this.objective = objetivo;
-        this.evidenceLink = linkDeEvidencia;
+        this.objective = objective;
+        this.evidencieLink = evidencieLink;
         this.employee = employee;
         this.status = ReportStatus.BORRADOR;
         this.createdAt = LocalDateTime.now();
     }
 
     private Report(ReportId reportId, String title, String description, String activities, String objective,
-            String evidenceLink,
+            String evidencieLink,
             ReportStatus status, User employee, LocalDateTime sentIn, LocalDateTime createdAt,
             LocalDateTime updatedAt) {
         this.reportId = reportId;
@@ -41,7 +41,7 @@ public class Report {
         this.description = description;
         this.activities = activities;
         this.objective = objective;
-        this.evidenceLink = evidenceLink;
+        this.evidencieLink = evidencieLink;
         this.status = status;
         this.employee = employee;
         this.sentIn = sentIn;
@@ -86,7 +86,7 @@ public class Report {
             this.objective = newObjective;
         }
         if (newLinkOfEvidence != null) {
-            this.evidenceLink = newLinkOfEvidence;
+            this.evidencieLink = newLinkOfEvidence;
         }
 
         this.updatedAt = LocalDateTime.now();
@@ -132,8 +132,8 @@ public class Report {
         return objective;
     }
 
-    public String getEvidenceLink() {
-        return evidenceLink;
+    public String getEvidencieLink() {
+        return evidencieLink;
     }
 
     public ReportStatus getStatus() {

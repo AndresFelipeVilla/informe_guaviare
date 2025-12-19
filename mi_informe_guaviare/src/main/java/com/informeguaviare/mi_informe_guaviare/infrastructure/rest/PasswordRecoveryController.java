@@ -38,7 +38,7 @@ public class PasswordRecoveryController {
 
         RequestPasswordResetCommand command = userMapperDTO.toRequestPasswordResetCommand(forgotPasswordRequest);
         requestPasswordResetUseCase.requestPasswordReset(command);
-        return ResponseEntity.ok(new MessageResponse("Password reset email sent"));
+        return ResponseEntity.ok(new MessageResponse("Correo enviado exitosamente"));
     }
 
     @PostMapping("/reset-password")
@@ -47,7 +47,7 @@ public class PasswordRecoveryController {
 
         ResetPasswordCommand command = userMapperDTO.toResetPasswordCommand(resetPasswordRequest);
         resetPasswordUseCase.resetPassword(command);
-        return ResponseEntity.ok(new MessageResponse("Password reset successfully"));
+        return ResponseEntity.ok(new MessageResponse("Contraseña restablecida exitosamente"));
     }
 
 }

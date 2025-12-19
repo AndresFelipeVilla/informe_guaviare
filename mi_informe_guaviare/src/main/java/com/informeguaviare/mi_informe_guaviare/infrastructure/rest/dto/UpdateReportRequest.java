@@ -17,6 +17,6 @@ public class UpdateReportRequest {
     @Size(max = 500, message = "El objetivo no puede exceder 500 caracteres")
     private String objective;
     @Size(max = 500, message = "El link de evidencia no puede exceder 500 caracteres")
-    private String evidenceLink;
+    private String evidencieLink;
 
 }
