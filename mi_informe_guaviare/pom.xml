@@ -105,7 +105,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -141,13 +140,6 @@
                             <version>${mapstruct.version}</version>
                         </path>
                     </annotationProcessorPaths>
-
-                    <!-- Descomenta las siguientes líneas si quieres ver logs detallados de MapStruct -->
-                    <!--
-                    <compilerArgs>
-                        <arg>-Amapstruct.verbose=true</arg>
-                    </compilerArgs>
-                    -->
                 </configuration>
             </plugin>
 
@@ -164,7 +156,6 @@
                     </excludes>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
 
