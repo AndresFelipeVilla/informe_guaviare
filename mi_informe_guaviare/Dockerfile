@@ -4,6 +4,8 @@ FROM eclipse-temurin:21-jdk-jammy as builder
 WORKDIR /app
 COPY .mvn/ .mvn
 COPY mvnw pom.xml ./
+# Dar permisos de ejecución al Maven Wrapper
+RUN chmod +x ./mvnw
 RUN ./mvnw dependency:go-offline
 COPY src ./src
 # Compila el proyecto y crea el archivo .jar
